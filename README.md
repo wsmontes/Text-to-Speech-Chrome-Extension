@@ -109,6 +109,10 @@ This extension does not collect, store, or transmit any personal data. When text
 
 The extension's source code is open and available for review in our GitHub repository.
 
+## 🔒 Privacy Policy
+
+This extension respects your privacy and does not collect any personal data. All text-to-speech processing happens locally in your browser. See our [Privacy Policy](PRIVACY.md) for complete details.
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
