@@ -67,6 +67,20 @@ chrome.runtime.onInstalled.addListener((details) => {
   }
 });
 
+// If you're using chrome.tts in the background script:
+function speakInBackground(text, options = {}) {
+  chrome.tts.speak(text, {
+    rate: options.rate || 1,
+    pitch: options.pitch || 1,
+    voiceName: options.voiceName,
+    onEvent: function(event) {
+      if (event.type === 'error') {
+        console.error('TTS Error:', event);
+      }
+    }
+  });
+}
+
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "speak-selection") {

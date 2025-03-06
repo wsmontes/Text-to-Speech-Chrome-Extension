@@ -7,7 +7,6 @@
     "storage",
     "activeTab",
     "contextMenus",
-    "scripting",
     "tts"
   ],
   "background": {

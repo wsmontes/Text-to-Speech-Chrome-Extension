@@ -201,6 +201,123 @@ document.addEventListener('DOMContentLoaded', () => {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
   
+  // Add this function to load voices when they're available
+  function initializeVoices() {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      populateVoiceList(voices);
+      // If there was a default voice set previously, select it
+      const savedVoice = localStorage.getItem('selectedVoice');
+      if (savedVoice) {
+        document.getElementById('voice-select').value = savedVoice;
+      }
+    }
+  }
+
   // Initialize
   loadSettings();
+  
+  // Initialize voices immediately if available
+  initializeVoices();
+  
+  // Also set up an event listener for when voices are loaded asynchronously
+  speechSynthesis.onvoiceschanged = initializeVoices;
+  
+  // Keep the existing Refresh Voices button functionality
+  document.getElementById('refresh-voices').addEventListener('click', function() {
+    const voices = speechSynthesis.getVoices();
+    populateVoiceList(voices);
+  });
+  
+  // Make sure the speak function checks if voices are available
+  function speak(text) {
+    return new Promise((resolve, reject) => {
+      if (!text) {
+        reject('No text to speak');
+        return;
+      }
+  
+      // Cancel any ongoing speech
+      if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+      }
+  
+      // Create a new utterance
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Set voice if available
+      const voiceSelect = document.getElementById('voice-select');
+      const voices = speechSynthesis.getVoices();
+      
+      if (voices.length > 0 && voiceSelect.value) {
+        const selectedVoice = voices.find(voice => voice.name === voiceSelect.value);
+        if (selectedVoice) utterance.voice = selectedVoice;
+      }
+      
+      // Set rate and pitch
+      utterance.rate = parseFloat(document.getElementById('rate').value) || 1;
+      utterance.pitch = parseFloat(document.getElementById('pitch').value) || 1;
+      
+      // Add event handlers
+      utterance.onend = () => resolve('Speech completed');
+      utterance.onerror = (event) => {
+        console.error('Speech synthesis error:', event);
+        reject(`Could not speak the text: ${event.error}`);
+      }
+      
+      // Speak the text - this must be triggered by a user gesture
+      speechSynthesis.speak(utterance);
+    });
+  }
+  
+  // Modify the event listener for the speak button
+  document.addEventListener('DOMContentLoaded', function() {
+    // ...existing code...
+    
+    // Initialize voices
+    if (speechSynthesis) {
+      // Try to get voices immediately
+      let voices = speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        populateVoiceList(voices);
+      }
+      
+      // Set up listener for when voices become available
+      speechSynthesis.onvoiceschanged = function() {
+        voices = speechSynthesis.getVoices();
+        populateVoiceList(voices);
+      };
+    }
+    
+    document.getElementById('speak-button').addEventListener('click', function() {
+      const textToSpeak = document.getElementById('text-to-speak').value;
+      
+      if (!textToSpeak) {
+        alert('Please enter text to speak.');
+        return;
+      }
+      
+      // Show a loading indicator or disable the button
+      const speakButton = document.getElementById('speak-button');
+      const originalText = speakButton.textContent;
+      speakButton.textContent = 'Speaking...';
+      speakButton.disabled = true;
+      
+      speak(textToSpeak)
+        .then(() => {
+          console.log('Speech completed successfully');
+        })
+        .catch((error) => {
+          console.error(error);
+          alert(error);
+        })
+        .finally(() => {
+          // Reset button state
+          speakButton.textContent = originalText;
+          speakButton.disabled = false;
+        });
+    });
+    
+    // ...existing code...
+  });
 });

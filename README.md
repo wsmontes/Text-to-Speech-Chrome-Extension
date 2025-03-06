@@ -80,6 +80,35 @@ If the text-to-speech functionality isn't working, try these steps:
 Open the browser console (F12 or Ctrl+Shift+J) and look for messages starting with "TTS Extension". 
 Report any errors you find when seeking support.
 
+## 📋 Chrome Web Store Permissions
+
+### Storage Permission
+The storage permission is required to save user preferences such as selected voice, speech rate, pitch settings, language preferences, and website-specific configurations. This ensures your settings persist across browser sessions.
+
+### ActiveTab Permission
+The activeTab permission is necessary to access text content on the current webpage when the user hovers over or selects text. This permission is triggered only when the user actively interacts with the extension and only affects the currently active tab.
+
+### ContextMenus Permission
+The contextMenus permission allows the extension to add a right-click menu option for users to select specific text and have it read aloud. This enhances accessibility by providing an alternative to the hover activation method.
+
+### TTS Permission
+The Text-to-Speech (tts) permission is essential for the extension's core functionality, allowing it to convert text to audible speech using Chrome's built-in speech synthesis capabilities.
+
+### Host Permission
+Host permissions are required for the extension to function across all websites, which is necessary to fulfill its purpose of providing text-to-speech capabilities on any webpage. The extension only accesses visible text content when triggered by user action (hovering or selection) and does not collect or transmit this data.
+
+## 🔒 Privacy Information
+
+### Data Collection
+This extension does not collect, store, or transmit any personal data. When text is converted to speech, the process happens locally in your browser. No text content, browsing history, or user information is sent to external servers.
+
+- No personally identifiable information is collected
+- No website content is stored or transmitted
+- User preferences are stored locally in your browser
+- No analytics or tracking mechanisms are implemented
+
+The extension's source code is open and available for review in our GitHub repository.
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
