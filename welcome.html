@@ -11,6 +11,7 @@
       margin: 0 auto;
       padding: 20px;
       color: #333;
+      background-color: #f7f9fc;
     }
     
     .header {
@@ -31,11 +32,12 @@
     }
     
     .feature {
-      background-color: #f9f9f9;
+      background-color: #ffffff;
       border-left: 5px solid #4285f4;
       padding: 15px;
       margin-bottom: 20px;
       border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     
     .feature h3 {
@@ -90,28 +92,80 @@
       border-top: 1px solid #eee;
       padding-top: 15px;
     }
+    
+    .status {
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+    
+    .status-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status-error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .voice-controls {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f0f4f8;
+      border-radius: 5px;
+      display: none;
+    }
+    
+    .voice-controls select, .voice-controls input {
+      margin-bottom: 10px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 100%;
+    }
+    
+    .test-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .test-options button {
+      padding: 8px 15px;
+      flex: 1;
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <img src="icons/icon128.png" alt="TTS Extension Logo" class="logo">
     <h1>Welcome to Text-to-Speech Extension</h1>
-    <p>Your browser can now read text aloud with a simple hover or selection</p>
+    <p>Transform your browsing experience with easy text-to-speech functionality</p>
   </div>
   
   <div class="feature">
     <h3>Getting Started</h3>
-    <p>The extension is already active! Just hover over text to hear it spoken aloud.</p>
-    <p>You can also select text and press <span class="shortcut">Alt+S</span> to hear it.</p>
+    <p>The extension is already active! Try these methods to hear text spoken aloud:</p>
+    <ul>
+      <li>Hover over text elements to hear them read (if hover mode is enabled)</li>
+      <li>Select any text and press <span class="shortcut">Alt+S</span> to have it read aloud</li>
+      <li>Right-click on selected text and choose "Speak selected text" from the context menu</li>
+    </ul>
   </div>
   
   <div class="feature">
     <h3>Key Features</h3>
     <ul>
-      <li><strong>Automatic Language Detection</strong> - The extension will try to detect the language of text</li>
-      <li><strong>Text Highlighting</strong> - See which text will be read</li>
+      <li><strong>Multiple Activation Methods</strong> - Hover, keyboard shortcuts, or context menu</li>
+      <li><strong>Voice Customization</strong> - Choose from available system voices</li>
+      <li><strong>Speech Controls</strong> - Adjust rate, pitch, and volume</li>
       <li><strong>Site-Specific Settings</strong> - Enable or disable on specific websites</li>
-      <li><strong>Customizable</strong> - Change voice speed, pitch, and more</li>
+      <li><strong>Reading Progress</strong> - Visual indication of current reading position</li>
     </ul>
   </div>
   
@@ -119,19 +173,42 @@
     <h3>Keyboard Shortcuts</h3>
     <ul>
       <li><span class="shortcut">Alt+S</span> - Speak selected text</li>
-      <li><span class="shortcut">Alt+T</span> - Toggle settings panel</li>
+      <li><span class="shortcut">Alt+X</span> - Stop current speech</li>
+      <li><span class="shortcut">Alt+T</span> - Toggle extension on/off</li>
     </ul>
   </div>
   
   <div class="feature">
-    <h3>First Time Tips</h3>
+    <h3>Important Notes</h3>
     <ul>
-      <li>Try to hover over various text elements on a page to see which ones trigger speech</li>
-      <li>Use the "Test Speech" button to verify your browser's audio is working properly</li>
-      <li>If you don't hear any speech, check the troubleshooting section in extension options</li>
-      <li>You can disable the extension on specific sites if you don't want it to activate there</li>
+      <li>Voice quality depends on your browser and operating system</li>
+      <li>Some websites may restrict content selection or hovering</li>
+      <li>For best performance, use Chrome browser version 91 or higher</li>
+      <li>You can fine-tune settings from the extension options page</li>
     </ul>
   </div>
+  
+  <div class="voice-controls" id="voice-controls">
+    <h3>Test Speech Settings</h3>
+    <div class="test-options">
+      <button id="show-voice-options">Voice Options</button>
+      <button id="hide-voice-options">Hide Options</button>
+    </div>
+    <div>
+      <label for="voice-select">Voice:</label>
+      <select id="voice-select"></select>
+    </div>
+    <div>
+      <label for="rate-slider">Rate: <span id="rate-value">1.0</span></label>
+      <input type="range" id="rate-slider" min="0.5" max="2" value="1" step="0.1">
+    </div>
+    <div>
+      <label for="pitch-slider">Pitch: <span id="pitch-value">1.0</span></label>
+      <input type="range" id="pitch-slider" min="0.5" max="2" value="1" step="0.1">
+    </div>
+  </div>
+  
+  <div class="status" id="status-message"></div>
   
   <div class="buttons">
     <button id="test-speech">Test Speech</button>
@@ -139,31 +216,144 @@
   </div>
   
   <footer>
-    <p>If you encounter any issues, please visit the extension options page for troubleshooting.</p>
-    <p>Voice options and quality depend on your browser and operating system.</p>
+    <p>Thank you for installing our Text-to-Speech Extension!</p>
+    <p>For support or to report issues, please visit the extension options page.</p>
   </footer>
 
   <script>
+    // Voice selector and controls
+    const voiceSelect = document.getElementById('voice-select');
+    const rateSlider = document.getElementById('rate-slider');
+    const rateValue = document.getElementById('rate-value');
+    const pitchSlider = document.getElementById('pitch-slider');
+    const pitchValue = document.getElementById('pitch-value');
+    const voiceControls = document.getElementById('voice-controls');
+    const statusMessage = document.getElementById('status-message');
+    
+    // Initialize speech synthesis
+    let voices = [];
+    
+    function populateVoiceList() {
+      voices = window.speechSynthesis.getVoices();
+      
+      if (voices.length === 0) {
+        setTimeout(populateVoiceList, 100);
+        return;
+      }
+      
+      // Clear existing options
+      voiceSelect.innerHTML = '';
+      
+      // Add voices to select element
+      voices.forEach((voice, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        
+        if (voice.default) {
+          option.selected = true;
+        }
+        
+        voiceSelect.appendChild(option);
+      });
+    }
+    
+    // Initialize voice list
+    populateVoiceList();
+    
+    // Chrome needs this event to properly populate voices
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+    
+    // Show status message
+    function showStatus(message, isError = false) {
+      statusMessage.textContent = message;
+      statusMessage.className = isError ? 'status status-error' : 'status status-success';
+      statusMessage.style.display = 'block';
+      
+      setTimeout(() => {
+        statusMessage.style.display = 'none';
+      }, 5000);
+    }
+    
+    // Update sliders
+    rateSlider.addEventListener('input', () => {
+      rateValue.textContent = rateSlider.value;
+    });
+    
+    pitchSlider.addEventListener('input', () => {
+      pitchValue.textContent = pitchSlider.value;
+    });
+    
+    // Voice control toggles
+    document.getElementById('show-voice-options').addEventListener('click', function() {
+      voiceControls.style.display = 'block';
+    });
+    
+    document.getElementById('hide-voice-options').addEventListener('click', function() {
+      voiceControls.style.display = 'none';
+    });
+    
+    // Test speech functionality
     document.getElementById('test-speech').addEventListener('click', function() {
-      // Wake up the speech synthesis system
+      // Stop any ongoing speech
       window.speechSynthesis.cancel();
       
-      // Force Chrome to wake up its speech engine
-      window.speechSynthesis.resume();
+      // Fix Chrome's bug where speech synthesis stops after ~15 seconds
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
       
-      const utterance = new SpeechSynthesisUtterance("Welcome to the Text to Speech Extension. Your browser can now read text aloud.");
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
-      utterance.volume = 1.0;
-      
-      // Give a brief moment for the synthesis to initialize
-      setTimeout(() => {
+      try {
+        const utterance = new SpeechSynthesisUtterance(
+          "Welcome to the Text to Speech Extension. This is a test to ensure your browser's text-to-speech functionality is working correctly."
+        );
+        
+        // Apply selected voice if available
+        if (voices.length > 0) {
+          const selectedVoice = voices[voiceSelect.value];
+          if (selectedVoice) {
+            utterance.voice = selectedVoice;
+          }
+        }
+        
+        // Apply rate and pitch
+        utterance.rate = parseFloat(rateSlider.value);
+        utterance.pitch = parseFloat(pitchSlider.value);
+        utterance.volume = 1.0;
+        
+        // Handle errors
+        utterance.onerror = (event) => {
+          showStatus(`Speech error: ${event.error}`, true);
+        };
+        
+        utterance.onend = () => {
+          showStatus('Speech test completed successfully');
+        };
+        
+        // Speak
         window.speechSynthesis.speak(utterance);
-      }, 100);
+        
+        // Chrome bug workaround - keep speech synthesis active
+        const intervalId = setInterval(() => {
+          if (!window.speechSynthesis.speaking) {
+            clearInterval(intervalId);
+          } else if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+        }, 5000);
+      } catch (error) {
+        showStatus(`Error initializing speech: ${error.message}`, true);
+      }
     });
     
     document.getElementById('open-options').addEventListener('click', function() {
-      chrome.runtime.openOptionsPage();
+      if (chrome.runtime && chrome.runtime.openOptionsPage) {
+        chrome.runtime.openOptionsPage();
+      } else {
+        showStatus('Unable to open options page. Please access it from your browser extensions menu.', true);
+      }
     });
   </script>
 </body>
