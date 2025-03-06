@@ -7,7 +7,8 @@
     "storage",
     "activeTab",
     "contextMenus",
-    "scripting"
+    "scripting",
+    "tts"
   ],
   "background": {
     "service_worker": "background.js"
@@ -51,5 +52,8 @@
       "description": "Toggle settings overlay"
     }
   },
-  "options_page": "options.html"
+  "options_page": "options.html",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }
