@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TTS Settings</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      width: 320px;
+      color: #333;
+      padding: 0;
+    }
+    
+    .container {
+      padding: 16px;
+    }
+    
+    h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 18px;
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+    
+    .section {
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+    }
+    
+    select,
+    input[type="range"],
+    input[type="color"] {
+      width: 100%;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .checkbox-container input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    
+    .radio-group {
+      margin-bottom: 10px;
+    }
+    
+    .radio-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    
+    .radio-option input {
+      margin-right: 8px;
+    }
+    
+    .value-display {
+      display: inline-block;
+      min-width: 30px;
+      text-align: right;
+      margin-left: 8px;
+      color: #666;
+    }
+    
+    .info {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+    
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .primary-btn {
+      background: #4285f4;
+      color: white;
+    }
+    
+    .secondary-btn {
+      background: #34a853;
+      color: white;
+    }
+    
+    .status {
+      font-size: 12px;
+      color: #666;
+      font-style: italic;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>Text-to-Speech Settings</h3>
+    
+    <div class="section">
+      <div class="checkbox-container">
+        <input type="checkbox" id="tts-auto-speech">
+        <label for="tts-auto-speech">Enable Auto Speech</label>
+      </div>
+      
+      <div class="radio-group">
+        <label>Trigger Mode:</label>
+        <div class="radio-option">
+          <input type="radio" id="tts-trigger-hover" name="triggerMode" value="hover">
+          <label for="tts-trigger-hover">On Hover</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="tts-trigger-selection" name="triggerMode" value="selection">
+          <label for="tts-trigger-selection">On Text Selection</label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="checkbox-container">
+        <input type="checkbox" id="tts-auto-detect">
+        <label for="tts-auto-detect">Auto-detect Text Language</label>
+      </div>
+      
+      <label for="tts-forced-lang">Force Language:</label>
+      <select id="tts-forced-lang">
+        <option value="en-US">English (US)</option>
+        <option value="pt-BR">Portuguese (Brazil)</option>
+        <option value="es-ES">Spanish (Spain)</option>
+        <option value="fr-FR">French (France)</option>
+        <option value="de-DE">German (Germany)</option>
+        <option value="it-IT">Italian (Italy)</option>
+        <option value="ja-JP">Japanese</option>
+        <option value="zh-CN">Chinese (China)</option>
+        <option value="ru-RU">Russian</option>
+        <option value="ar-SA">Arabic (Saudi Arabia)</option>
+        <option value="hi-IN">Hindi (India)</option>
+      </select>
+    </div>
+    
+    <div class="section">
+      <label for="tts-highlight-style">Highlight Style:</label>
+      <select id="tts-highlight-style">
+        <option value="default">Default (Yellow)</option>
+        <option value="subtle">Subtle (Light Blue)</option>
+        <option value="custom">Custom Color</option>
+        <option value="none">No Highlight</option>
+      </select>
+      
+      <div id="custom-color-container">
+        <label for="tts-custom-color">Custom Color:</label>
+        <input type="color" id="tts-custom-color">
+      </div>
+    </div>
+    
+    <div class="section">
+      <label for="tts-voice-rate">
+        Speech Rate: <span class="value-display" id="rate-display">1.0x</span>
+      </label>
+      <input type="range" id="tts-voice-rate" min="0.5" max="2" step="0.1" value="1.0">
+      
+      <label for="tts-voice-pitch">
+        Voice Pitch: <span class="value-display" id="pitch-display">1.0x</span>
+      </label>
+      <input type="range" id="tts-voice-pitch" min="0.5" max="2" step="0.1" value="1.0">
+    </div>
+    
+    <div class="section">
+      <p class="info">Detected browser language: <span id="browser-language"></span></p>
+      <p class="info">Available voices: <span id="voice-count">Loading...</span></p>
+      <p class="info">TIP: Press Alt+S to speak selected text</p>
+    </div>
+    
+    <div>
+      <button id="tts-test-speech" class="primary-btn">Test Speech</button>
+      <button id="tts-refresh-voices" class="secondary-btn">Refresh Voices</button>
+      <button id="tts-open-settings" class="primary-btn">Open In-Page Settings</button>
+      <div class="status" id="status-message"></div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

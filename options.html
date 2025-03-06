@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TTS Extension Options</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+    }
+    
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .logo {
+      width: 48px;
+      margin-right: 15px;
+    }
+    
+    .header h1 {
+      margin: 0;
+      color: #4285f4;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      margin-right: 5px;
+      border-radius: 5px 5px 0 0;
+    }
+    
+    .tab.active {
+      background: white;
+      border-bottom: 1px solid white;
+      margin-bottom: -1px;
+      font-weight: bold;
+    }
+    
+    .tab-content {
+      display: none;
+      padding: 20px 0;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    
+    select,
+    input[type="range"],
+    input[type="color"],
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      margin-bottom: 5px;
+      box-sizing: border-box;
+    }
+    
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .checkbox-container input {
+      margin-right: 10px;
+    }
+    
+    .site-list {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+    
+    .site-item {
+      padding: 10px 15px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .site-item:last-child {
+      border-bottom: none;
+    }
+    
+    .site-controls {
+      display: flex;
+      align-items: center;
+    }
+    
+    .site-status {
+      margin-right: 15px;
+      font-size: 13px;
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+    
+    .site-status.enabled {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .site-status.disabled {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #4285f4;
+      color: white;
+      font-weight: 500;
+      margin-right: 5px;
+    }
+    
+    button.danger {
+      background-color: #dc3545;
+    }
+    
+    button.secondary {
+      background-color: #6c757d;
+    }
+    
+    button:hover {
+      opacity: 0.9;
+    }
+    
+    .add-site-form {
+      display: flex;
+      margin-top: 15px;
+    }
+    
+    .add-site-form input {
+      flex: 1;
+      margin-right: 10px;
+    }
+    
+    .value-display {
+      display: inline-block;
+      min-width: 30px;
+      text-align: right;
+      margin-left: 8px;
+      color: #666;
+    }
+    
+    .slider-container {
+      margin-bottom: 15px;
+    }
+    
+    .info {
+      font-size: 13px;
+      color: #666;
+      margin-top: 8px;
+    }
+    
+    .status-message {
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 4px;
+      text-align: center;
+      display: none;
+    }
+    
+    .status-message.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status-message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+    
+    .empty-state p {
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="icons/icon48.png" alt="TTS Extension" class="logo">
+    <h1>Text-to-Speech Extension Settings</h1>
+  </div>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="general">General Settings</div>
+    <div class="tab" data-tab="sites">Site Management</div>
+    <div class="tab" data-tab="voices">Voice Settings</div>
+    <div class="tab" data-tab="troubleshooting">Troubleshooting</div>
+  </div>
+  
+  <div class="tab-content active" id="general">
+    <h2>General Settings</h2>
+    
+    <div class="form-group">
+      <div class="checkbox-container">
+        <input type="checkbox" id="auto-speech" checked>
+        <label for="auto-speech">Enable Auto Speech</label>
+      </div>
+      <p class="info">When enabled, text will be read automatically on hover or selection</p>
+    </div>
+    
+    <div class="form-group">
+      <label>Trigger Mode</label>
+      <div class="checkbox-container">
+        <input type="radio" name="trigger-mode" id="trigger-hover" value="hover" checked>
+        <label for="trigger-hover">On Hover (read when hovering over text)</label>
+      </div>
+      <div class="checkbox-container">
+        <input type="radio" name="trigger-mode" id="trigger-selection" value="selection">
+        <label for="trigger-selection">On Selection (read only selected text)</label>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <div class="checkbox-container">
+        <input type="checkbox" id="auto-detect" checked>
+        <label for="auto-detect">Auto-detect Text Language</label>
+      </div>
+      
+      <div class="forced-language-container">
+        <label for="forced-language">Force Language (when auto-detect is off):</label>
+        <select id="forced-language">
+          <option value="en-US">English (US)</option>
+          <option value="pt-BR">Portuguese (Brazil)</option>
+          <option value="es-ES">Spanish (Spain)</option>
+          <option value="fr-FR">French (France)</option>
+          <option value="de-DE">German (Germany)</option>
+          <option value="it-IT">Italian (Italy)</option>
+          <option value="ja-JP">Japanese</option>
+          <option value="zh-CN">Chinese (China)</option>
+          <option value="ru-RU">Russian</option>
+          <option value="ar-SA">Arabic (Saudi Arabia)</option>
+          <option value="hi-IN">Hindi (India)</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="highlight-style">Highlight Style:</label>
+      <select id="highlight-style">
+        <option value="default">Default (Yellow)</option>
+        <option value="subtle">Subtle (Light Blue)</option>
+        <option value="custom">Custom Color</option>
+        <option value="none">No Highlight</option>
+      </select>
+      
+      <div id="custom-color-container" style="display: none;">
+        <label for="custom-highlight-color">Custom Color:</label>
+        <input type="color" id="custom-highlight-color" value="#FFFF00">
+      </div>
+    </div>
+    
+    <button id="save-general">Save Settings</button>
+    <div class="status-message" id="general-status"></div>
+  </div>
+  
+  <div class="tab-content" id="sites">
+    <h2>Site Management</h2>
+    <p>Enable or disable TTS for specific websites</p>
+    
+    <div class="site-list" id="site-list">
+      <div class="empty-state">
+        <p>No site preferences added yet.</p>
+        <p>Add a site below to customize its settings.</p>
+      </div>
+    </div>
+    
+    <div class="add-site-form">
+      <input type="text" id="new-site" placeholder="Enter domain (e.g., example.com)">
+      <button id="add-site">Add Site</button>
+    </div>
+    
+    <div class="status-message" id="sites-status"></div>
+  </div>
+  
+  <div class="tab-content" id="voices">
+    <h2>Voice Settings</h2>
+    
+    <div class="form-group">
+      <label for="voice-rate">
+        Speech Rate: <span class="value-display" id="rate-display">1.0x</span>
+      </label>
+      <input type="range" id="voice-rate" min="0.5" max="2" step="0.1" value="1.0">
+      <p class="info">Controls how fast text is spoken</p>
+    </div>
+    
+    <div class="form-group">
+      <label for="voice-pitch">
+        Voice Pitch: <span class="value-display" id="pitch-display">1.0x</span>
+      </label>
+      <input type="range" id="voice-pitch" min="0.5" max="2" step="0.1" value="1.0">
+      <p class="info">Controls the pitch of the voice</p>
+    </div>
+    
+    <div class="form-group">
+      <label for="available-voices">Available Voices:</label>
+      <select id="available-voices" size="10" style="height: 200px;">
+        <option>Loading voices...</option>
+      </select>
+      <p class="info">These are the voices available in your browser. Voice selection is done automatically based on the detected language.</p>
+    </div>
+    
+    <button id="refresh-voices">Refresh Voices List</button>
+    <button id="save-voices" class="primary">Save Voice Settings</button>
+    <div class="status-message" id="voices-status"></div>
+  </div>
+  
+  <div class="tab-content" id="troubleshooting">
+    <h2>Troubleshooting</h2>
+    
+    <div class="form-group">
+      <h3>Test Speech</h3>
+      <p>Use this to test if speech synthesis is working correctly</p>
+      <input type="text" id="test-text" value="This is a test of the text-to-speech system.">
+      <button id="test-speech">Speak Test Text</button>
+    </div>
+    
+    <div class="form-group">
+      <h3>Diagnostic Information</h3>
+      <p>Browser: <span id="browser-info">...</span></p>
+      <p>Language: <span id="language-info">...</span></p>
+      <p>Available Voices: <span id="voice-count">...</span></p>
+    </div>
+    
+    <div class="form-group">
+      <h3>Reset Extension</h3>
+      <p>Reset all extension settings to default values</p>
+      <button id="reset-settings" class="danger">Reset All Settings</button>
+      <p class="info">Warning: This will erase all your customizations!</p>
+    </div>
+    
+    <div class="status-message" id="troubleshooting-status"></div>
+  </div>
+  
+  <script src="options.js"></script>
+</body>
+</html>

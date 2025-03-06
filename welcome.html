@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Text-to-Speech Extension</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+    }
+    
+    .header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 30px;
+    }
+    
+    .logo {
+      max-width: 128px;
+      margin-bottom: 15px;
+    }
+    
+    h1 {
+      color: #4285f4;
+      margin-bottom: 10px;
+    }
+    
+    .feature {
+      background-color: #f9f9f9;
+      border-left: 5px solid #4285f4;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+    }
+    
+    .feature h3 {
+      margin-top: 0;
+      color: #4285f4;
+    }
+    
+    .shortcut {
+      display: inline-block;
+      background-color: #f5f5f5;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-family: monospace;
+      font-weight: bold;
+    }
+    
+    .buttons {
+      text-align: center;
+      margin-top: 30px;
+    }
+    
+    button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4285f4;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    button:hover {
+      background-color: #3367d6;
+    }
+    
+    .secondary {
+      background-color: #34a853;
+    }
+    
+    .secondary:hover {
+      background-color: #2d8e47;
+    }
+    
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="icons/icon128.png" alt="TTS Extension Logo" class="logo">
+    <h1>Welcome to Text-to-Speech Extension</h1>
+    <p>Your browser can now read text aloud with a simple hover or selection</p>
+  </div>
+  
+  <div class="feature">
+    <h3>Getting Started</h3>
+    <p>The extension is already active! Just hover over text to hear it spoken aloud.</p>
+    <p>You can also select text and press <span class="shortcut">Alt+S</span> to hear it.</p>
+  </div>
+  
+  <div class="feature">
+    <h3>Key Features</h3>
+    <ul>
+      <li><strong>Automatic Language Detection</strong> - The extension will try to detect the language of text</li>
+      <li><strong>Text Highlighting</strong> - See which text will be read</li>
+      <li><strong>Site-Specific Settings</strong> - Enable or disable on specific websites</li>
+      <li><strong>Customizable</strong> - Change voice speed, pitch, and more</li>
+    </ul>
+  </div>
+  
+  <div class="feature">
+    <h3>Keyboard Shortcuts</h3>
+    <ul>
+      <li><span class="shortcut">Alt+S</span> - Speak selected text</li>
+      <li><span class="shortcut">Alt+T</span> - Toggle settings panel</li>
+    </ul>
+  </div>
+  
+  <div class="feature">
+    <h3>First Time Tips</h3>
+    <ul>
+      <li>Try to hover over various text elements on a page to see which ones trigger speech</li>
+      <li>Use the "Test Speech" button to verify your browser's audio is working properly</li>
+      <li>If you don't hear any speech, check the troubleshooting section in extension options</li>
+      <li>You can disable the extension on specific sites if you don't want it to activate there</li>
+    </ul>
+  </div>
+  
+  <div class="buttons">
+    <button id="test-speech">Test Speech</button>
+    <button id="open-options" class="secondary">Customize Settings</button>
+  </div>
+  
+  <footer>
+    <p>If you encounter any issues, please visit the extension options page for troubleshooting.</p>
+    <p>Voice options and quality depend on your browser and operating system.</p>
+  </footer>
+
+  <script>
+    document.getElementById('test-speech').addEventListener('click', function() {
+      // Wake up the speech synthesis system
+      window.speechSynthesis.cancel();
+      
+      // Force Chrome to wake up its speech engine
+      window.speechSynthesis.resume();
+      
+      const utterance = new SpeechSynthesisUtterance("Welcome to the Text to Speech Extension. Your browser can now read text aloud.");
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+      
+      // Give a brief moment for the synthesis to initialize
+      setTimeout(() => {
+        window.speechSynthesis.speak(utterance);
+      }, 100);
+    });
+    
+    document.getElementById('open-options').addEventListener('click', function() {
+      chrome.runtime.openOptionsPage();
+    });
+  </script>
+</body>
+</html>

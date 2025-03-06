@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "Text-to-Speech Extension",
+  "version": "1.0.1",
+  "description": "Automatically reads text on hover or selection with improved language detection",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "contextMenus",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Text-to-Speech Tools"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": ["diagnostics.js", "welcome.html", "icons/*"],
+    "matches": ["<all_urls>"]
+  }],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "commands": {
+    "speak-selection": {
+      "suggested_key": {
+        "default": "Alt+S"
+      },
+      "description": "Speak selected text"
+    },
+    "toggle-settings": {
+      "suggested_key": {
+        "default": "Alt+T"
+      },
+      "description": "Toggle settings overlay"
+    }
+  },
+  "options_page": "options.html"
+}
