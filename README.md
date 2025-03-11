@@ -1,7 +1,5 @@
 # Text-to-Speech Chrome Extension
 
-> **Note:** This extension is currently under development and not yet published to the Chrome Web Store.
-
 A powerful Chrome extension that converts text to speech on any webpage. Simply hover over text to have it read aloud to you.
 
 ## ✨ Features
@@ -12,9 +10,20 @@ A powerful Chrome extension that converts text to speech on any webpage. Simply 
 - 🛠️ Includes fixes for Chrome's speech synthesis limitations
 - 💻 Works across most websites
 
-## 📥 Installation (Developer Mode)
+## 📥 Installation
 
-Since this extension is not yet published to the Chrome Web Store, you can install it in developer mode:
+### Chrome Web Store (Recommended)
+
+You can install this extension directly from the Chrome Web Store:
+
+1. Visit the [Text-to-Speech Extension page](https://chromewebstore.google.com/detail/text-to-speech-extension/bjidgmpmbodlobefnnnaableplbjgndo) on Chrome Web Store
+2. Click "Add to Chrome"
+3. Confirm the installation when prompted
+4. The extension will be automatically installed and appear in your toolbar
+
+### Developer Mode (For Contributors)
+
+If you want to use the development version or contribute to the project:
 
 1. Download or clone this repository
 2. Open Chrome and navigate to `chrome://extensions`
